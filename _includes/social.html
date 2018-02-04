@@ -1,0 +1,27 @@
+<ul class="social-media-list">
+  {% if site.github_username%}
+  <li>
+    This site's repository: <br/>
+    <a href="https://github.com/{{ site.github_username| cgi_escape | escape }}/gellius-db.github.io" target="_blank">
+      <svg class="svg-icon">
+        <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+      </svg>
+      <span class="username">{{ site.github_username| escape }}</span>
+    </a>
+  </li>
+  {% endif %}
+  {% if site.github_username2%}
+  <li>
+    Developer: <br/>
+    <a href="https://github.com/{{ site.github_username2| cgi_escape | escape }}" target="_blank">
+      <svg class="svg-icon">
+        <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+      </svg>
+      <span class="username">
+        {{ site.github_username2| escape }}
+      </span>
+    </a>
+  </li>
+  {% endif %}
+  {% if site.rss %}<li><a href="{{ 'feed.xml' | relative_url }}"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg> <span>{{ site.rss | escape }}</span></a></li>{% endif %}
+</ul>
