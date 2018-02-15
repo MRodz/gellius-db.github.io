@@ -4,18 +4,19 @@ title: View all availabe keywords
 permalink: /keywords/
 ---
 
-<div id="keywords-text">Please click on a keyword to display all <em>commentarii</em> connected with it.</div>
+<div id="keywords-text">Please click on a keyword to display all <em>commentarii</em> connected with it. For a combined search please refer to <a href="{{ "/query/" | absolute_url}}">Query the DB</a></div>
 <div id="keywords"></div>
+<div id="commentarii"></div>
 
 <script>
 (function loadJSON() {
   var xmlhttp = new XMLHttpRequest();
 
   // getting all keywords from all commentarii available
-  var queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FsubjectLabel%20%3Foccurence%20WHERE%20%7B%0A%20%20%3FNoctes_Atticae%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3FNoctes_Atticae%20wdt%3AP921%20%3Fsubject.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22%20%7D%0A%7D%0AORDER%20BY%20ASC(UCASE(str(%3FsubjectLabel)))&format=json";
+  var queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FsubjectLabel%20%3Fsubject%20WHERE%20%7B%0A%20%20%3FNoctes_Atticae%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3FNoctes_Atticae%20wdt%3AP921%20%3Fsubject.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22%20%7D%0A%7D%0AORDER%20BY%20ASC(UCASE(str(%3FsubjectLabel)))&format=json";
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      displayTable(this);
+      displayResults(this);
     }
   };
   xmlhttp.open("GET", queryURL, true);
@@ -23,15 +24,54 @@ permalink: /keywords/
   xmlhttp.send();
 })();
 
-function displayTable(json) {
+function displayResults(json) {
   var object = json.response;
   var result = object.results.bindings;
+  var container = "<div/>";
   for (var iii in result) {
     if (result.hasOwnProperty(iii)) {
-      var button = "<button type='button' class='btn btn-outline-info'>";
+      var www = result[iii].subject.value;
+      var uri = String(www.match(/Q\d+/g));
+      console.log(uri);
+      var button = "<button onclick=\x27getCommentarii(\x22" + uri + "\x22)\x27>";
       var value = result[iii].subjectLabel.value;
         button += value + "</button>";
-        document.getElementById("keywords").innerHTML = button;
+        container += button;
+        document.getElementById("keywords").innerHTML = container;
+    }
+  }
+};
+
+function getCommentarii(uri) {
+  console.log("test");
+  console.log(uri);
+  var xmlhttp = new XMLHttpRequest();
+
+  // getting all commentarii with selected keyword
+  var queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FitemLabel%20WHERE%20%7B%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ1980247.%0A%20%20%3Fitem%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3Fitem%20wdt%3AP921%20wd%3A"
+  + uri + ".%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D&format=json";
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      displayCommentarii(this);
+    }
+  };
+  xmlhttp.open("GET", queryURL, true);
+  xmlhttp.responseType = "json";
+  xmlhttp.send();
+};
+
+function displayCommentarii(json) {
+  console.log("test2");
+  var object = json.response;
+  var result = object.results.bindings;
+  var container = "<div/>";
+  for (var iii in result) {
+    if (result.hasOwnProperty(iii)) {
+      var div = "<div>";
+      var value = result[iii].itemLabel.value;
+        div += value + "</button>";
+        container += div;
+        document.getElementById("commentarii").innerHTML = container;
     }
   }
 }
