@@ -21,9 +21,11 @@ layout: default
             {{ post.title | escape }}
           </a>
           {{ post.excerpt }}
+          {% if post.length == 'long' %}
           <a class="excerpt-link" href="{{ post.url | relative_url }}">
             [Read more.]
           </a>
+          {% endif %}
       </li>
       {% endfor %}
     </ul>
