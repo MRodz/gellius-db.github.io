@@ -13,7 +13,7 @@ permalink: /keywords/
   var xmlhttp = new XMLHttpRequest();
 
   // getting all keywords from all commentarii available
-  var queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FsubjectLabel%20%3Fsubject%20WHERE%20%7B%0A%20%20%3FNoctes_Atticae%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3FNoctes_Atticae%20wdt%3AP921%20%3Fsubject.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22%20%7D%0A%7D%0AORDER%20BY%20ASC(UCASE(str(%3FsubjectLabel)))&format=json";
+  var queryURL = "https://query.wikidata.org/sparql?query=SELECT%20DISTINCT%20%3FsubjectLabel%20%3Fsubject%20WHERE%20%7B%0A%20%20%3FNoctes_Atticae%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3FNoctes_Atticae%20wdt%3AP921%20%3Fsubject.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22%20%7D%0A%7D%0AORDER%20BY%20ASC(UCASE(str(%3FsubjectLabel)))&format=json";
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       displayResults(this);
