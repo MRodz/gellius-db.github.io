@@ -1,0 +1,15 @@
+---
+layout: page
+---
+
+<h1>{{page.title | markdownify}}</h1>
+
+<div id="keywords-text">Click on a {{page.key}} to display all <em>commentarii</em> connected with it. For a combined search please refer to <a href="{{ "/query/" | absolute_url}}">Query the DB</a>.</div>
+<div id="keywords"></div>
+<div id="commentarii"></div>
+
+
+<script type="text/javascript" src="{{"/assets/js/simple-queries.js"}}"></script>
+<script>
+  loadJSON('{{page.key}}');
+</script>

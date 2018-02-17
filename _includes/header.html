@@ -50,8 +50,15 @@
                 </a>
               </td>
               <td>
-                <a class="page-link" href="{{ "/pages/keywords/" | absolute_url }}">
-                  View all available keywords
+                  <div class="dropdown">
+                    <button class="dropbtn">View all available...</button>
+                    <div class="dropdown-content">
+                      <a href="{{"/pages/commentarii/" | absolute_url}}"><span><em>commentarii</em></span></a>
+                      <a href="{{"/pages/keywords/" | absolute_url}}"><span>keywords</span></a>
+                      <a href="{{"/pages/persons/" | absolute_url}}"><span>persons</span></a>
+                      <a href="{{"/pages/places/" | absolute_url}}"><span>places</span></a>
+                    </div>
+                  </div>
                 </a>
               </td>
               <td>

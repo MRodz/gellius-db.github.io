@@ -1,0 +1,17 @@
+---
+layout: page
+title: View all availabe _commentarii_
+key: commentarii
+permalink: /pages/commentarii/
+---
+
+<h1>{{page.title | markdownify}}</h1>
+
+<div id="keywords-text">This is a list of all <em>commentarii</em> that are currently available at Wikidata:</div>
+<div id="commentarii"></div>
+
+
+<script type="text/javascript" src="{{"/assets/js/simple-queries.js"}}"></script>
+<script>
+  loadJSON('{{page.key}}');
+</script>
