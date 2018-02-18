@@ -7,7 +7,7 @@
 /**
  * Loads a JSON object from the Wikidata Query service.
  * Which JSON is retrieved depends on the key which is passed by the page that calls this function.
- * @param {string} key - The key which determines, what JSON is loaded from Wikidata. Possible values: keywords, persons, places, commentarii.
+ * @param {string} key - The key which determines, what JSON is loaded from Wikidata. Possible values: keywords, persons, places, commentarii, quotes.
  */
 function loadJSON(key) {
   var queryURL;
@@ -25,7 +25,7 @@ function loadJSON(key) {
 /**
  * Displays all available keywords, persons, or places (depending on which key is passed to this function) by pushing the results into a container element.
  * @param {Object} json - The JSON object that stores the query results.
- * @param {string} key - The key that has to be passed to getCommentarii() to determine which commentarii fit a selected keyword, person, or place.
+ * @param {string} key - The key that has to be passed to getCommentarii() to determine which commentarii fit a selected keyword, person, place, or cited work.
  */
 function displayResults(json, key) {
   var object = json.response;
@@ -45,7 +45,7 @@ function displayResults(json, key) {
 };
 
 /**
- * Displays all commentarii that are (a) available or (b) that fit a selected keyword, person, or place by pushing the results into a container element.
+ * Displays all commentarii that are (a) available or (b) that fit a selected keyword, person, place, or cited work by pushing the results into a container element.
  * Note: (a) will be deprecated as soon as all commentarii have an item in Wikidata.
  * @param {Object} json - The JSON object with all commentarii that satisfy the query made in getCommentarii().
  */
@@ -65,7 +65,7 @@ function displayCommentarii(json) {
 }
 
 /**
- * Sends a query to determine all commentarii that fit a selected keyword, person, or place.
+ * Sends a query to determine all commentarii that fit a selected keyword, person, place, or cited work.
  * @param {string} uri - The Wikidata uri of a selected keyword, person, or place.
 *  @param {string} key - The key that determines which Wikidata property is selected in buildQuery().
  */
@@ -118,6 +118,8 @@ function buildQuery(key, queryHeader, queryTail) {
   } else if (key == 'places') {
     // wdt:P840: narrative location
     queryURL = queryHeader + "wdt%3AP840" + queryTail;
+  } else if (key == 'quotes') {
+    queryURL = queryHeader + "wdt%3AP2860" + queryTail;
   } else if (key == 'commentarii') {
     queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FitemLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%20%20%3Fitem%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ1980247.%0A%7D&format=json";
   }
