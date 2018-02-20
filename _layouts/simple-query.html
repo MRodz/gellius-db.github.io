@@ -5,8 +5,19 @@ layout: page
 <h1>{{page.title | markdownify}}</h1>
 
 <div id="keywords-text">Click on a {{page.key}} to display all <em>commentarii</em> connected with it. For a combined search please refer to <a href="{{ "/query/" | absolute_url}}">Query the DB</a>.</div>
-<div id="keywords"></div>
-<div id="commentarii"></div>
+
+<table class="result">
+  <tr>
+    <td class="queried">
+      <div id="keywords"></div>
+    </td>
+    <td class="commentarii">
+      <div id="commentarii"></div>
+    </td>
+  </tr>
+</table>
+
+
 
 
 <script type="text/javascript" src="{{"/assets/js/simple-queries.js"}}"></script>

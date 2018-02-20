@@ -383,3 +383,16 @@ button:hover {
    background-color: #fff;
    color: inherit;
 }
+
+
+.result {
+  border: 0;
+}
+
+.result * {
+  border: inherit;
+}
+
+td.commentarii {
+  width: 50%;
+}
