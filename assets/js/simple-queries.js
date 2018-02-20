@@ -37,9 +37,15 @@ function displayResults(json, key) {
       var uri = String(www.match(/Q\d+/g));
       var button = "<button onclick=\x27getCommentarii(\x22" + uri + "\x22, \x22" + key + "\x22)\x27>";
       var value = result[iii].itemLabel.value;
+      var author;
+      if (key == 'quotes') {
+        author =  result[iii].authorLabel.value;
+        button += `${author} \u2013 ${value}</button>`;
+      } else {
         button += value + "</button>";
-        container += button;
-        document.getElementById("keywords").innerHTML = container;
+      }
+      container += button;
+      document.getElementById("keywords").innerHTML = container;
     }
   }
 };
@@ -72,7 +78,7 @@ function displayCommentarii(json) {
 function getCommentarii(uri, key) {
   var queryURL;
   var queryHeader = "https://query.wikidata.org/sparql?query=SELECT%20%3FitemLabel%20WHERE%20%7B%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ1980247.%0A%20%20%3Fitem%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3Fitem%20";
-  var queryTail = "%20wd%3A" + uri + ".%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D&format=json";
+  var queryTail = `%20wd%3A${uri}.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D&format=json`;
 
   queryURL = buildQuery(key, queryHeader, queryTail);
   getJSON(key, queryURL, 'commentarii');
@@ -118,10 +124,11 @@ function buildQuery(key, queryHeader, queryTail) {
   } else if (key == 'places') {
     // wdt:P840: narrative location
     queryURL = queryHeader + "wdt%3AP840" + queryTail;
+    // get all cited works AND their author
   } else if (key == 'quotes') {
-    queryURL = queryHeader + "wdt%3AP2860" + queryTail;
+    queryURL = "https://query.wikidata.org/sparql?query=SELECT%20DISTINCT%20%3FitemLabel%20%3Fitem%20%3FauthorLabel%20WHERE%20%7B%0A%3FNoctes_Atticae%20wdt%3AP361*%20wd%3AQ660519.%0A%3FNoctes_Atticae%20wdt%3AP2860%20%3Fitem.%20%0A%20%20%3Fitem%20wdt%3AP50%20%3Fauthor.%0A%20%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22%20%7D%0A%7D%0AORDER%20BY%20ASC(UCASE(str(%3FauthorLabel)))&format=json";
   } else if (key == 'commentarii') {
     queryURL = "https://query.wikidata.org/sparql?query=SELECT%20%3FitemLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%20%20%3Fitem%20wdt%3AP361*%20wd%3AQ660519.%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ1980247.%0A%7D&format=json";
   }
   return queryURL;
-}
+};
